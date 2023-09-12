@@ -1,9 +1,6 @@
 package com.ronjunevaldoz.todo.ui.screens.todo.list
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,12 +8,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Task
 import androidx.compose.runtime.Composable
@@ -25,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.ronjunevaldoz.todo.model.data.Todo
 import com.ronjunevaldoz.todo.model.data.color
@@ -49,13 +45,39 @@ fun TaskItem(
                     onEvent(TaskListEvent.OnTaskClick(task))
                 },
             )
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 8.dp, vertical = 8.dp),
         elevation = 4.dp
     ) {
+
+        Box(contentAlignment = Alignment.CenterEnd) {
+            Column {
+                IconButton(
+                    onClick = {
+                        showPicker.value = true
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Circle,
+                        contentDescription = "Priority",
+                        tint = task.priority.color,
+                    )
+                }
+                IconButton(onClick = {
+                    onEvent(TaskListEvent.DeleteTask(task))
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Delete"
+                    )
+                }
+            }
+        }
+
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
@@ -71,31 +93,11 @@ fun TaskItem(
                 }
             }
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = "Priority - ${task.priority.name}",
-                    color = Color.White,
-                    fontWeight = FontWeight.ExtraBold,
-                    modifier = Modifier
-                        .border(1.dp, task.priority.color, RoundedCornerShape(6.dp))
-                        .background(task.priority.color.copy(0.5f), RoundedCornerShape(6.dp))
-                        .padding(3.dp)
-                        .clickable {
-                            showPicker.value = true
-                        }
-                )
                 Text(text = task.title)
                 Text(text = task.description, color = Color.LightGray)
                 Text(
                     text = task.dueDateTime.toLocalDateTime(TimeZone.currentSystemDefault()).date.calendarLabel,
                     color = Color.LightGray
-                )
-            }
-            IconButton(onClick = {
-                onEvent(TaskListEvent.DeleteTask(task))
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Delete"
                 )
             }
         }
