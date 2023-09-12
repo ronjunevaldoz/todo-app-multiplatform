@@ -1,6 +1,9 @@
 ## TODO-App Cross-platform
 - Project template from jetpack compose multiplatform
 
+## Extras
+- [x] Added a basic custom calendar without using any third party library
+
 ## User guide
 
 1. Login to proceed to todo list
