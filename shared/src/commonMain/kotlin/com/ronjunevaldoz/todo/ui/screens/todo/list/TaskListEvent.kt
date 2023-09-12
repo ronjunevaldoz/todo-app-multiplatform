@@ -7,6 +7,6 @@ sealed class TaskListEvent {
     data class OnTaskClick(val task: Todo) : TaskListEvent()
     data object OnAddTaskClick : TaskListEvent()
     data class OnPriorityChange(val task: Todo, val priority: Priority) : TaskListEvent()
-    data class OnDoneChange(val task: Todo, val isDone: Boolean) : TaskListEvent()
+    data class OnStatusCompleted(val task: Todo, val completed: Boolean) : TaskListEvent()
     data class DeleteTask(val task: Todo) : TaskListEvent()
 }

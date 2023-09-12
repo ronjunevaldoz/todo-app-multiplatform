@@ -26,10 +26,12 @@ class TaskListViewModel : ViewModel() {
                 sendUiEvent(UiEvent.Navigate("/${Routes.ADD_EDIT_TASK}/"))
             }
 
-            is TaskListEvent.OnDoneChange -> {
+            is TaskListEvent.OnStatusCompleted -> {
                 viewModelScope.launch {
-                    TodoRepository.add(event.task)
-                    sendUiEvent(UiEvent.ShowSnackBar("New todo created"))
+                    TodoRepository.update(event.task.id) {
+                        completed = event.completed
+                    }
+                    sendUiEvent(UiEvent.ShowSnackBar("Todo ${event.task.title} status changed."))
                 }
             }
 

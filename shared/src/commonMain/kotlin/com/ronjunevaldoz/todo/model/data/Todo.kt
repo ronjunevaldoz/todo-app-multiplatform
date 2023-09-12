@@ -14,6 +14,7 @@ class Todo : RealmObject {
     var _id: ObjectId = ObjectId()
     var title: String = ""
     var description: String = ""
+    var completed: Boolean = false
     private var _priority: Int = Priority.LOW.value
     private var _dueDateTime = RealmInstant.now()
 
@@ -48,4 +49,7 @@ class Todo : RealmObject {
             // users set state using a FrogState, but it is saved as a string internally
             _priority = value.value
         }
+
+    val status: String
+        get() = if(completed) "Completed" else "Todo"
 }

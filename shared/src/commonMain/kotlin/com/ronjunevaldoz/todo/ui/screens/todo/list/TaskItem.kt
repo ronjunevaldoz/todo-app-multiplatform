@@ -13,9 +13,10 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckBox
+import androidx.compose.material.icons.filled.CheckBoxOutlineBlank
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Task
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -85,14 +86,24 @@ fun TaskItem(
                 contentAlignment = Alignment.Center
             ) {
                 IconButton(onClick = {
+                    onEvent(
+                        TaskListEvent.OnStatusCompleted(
+                            task = task,
+                            completed = !task.completed
+                        )
+                    )
                 }) {
+                    val taskIcon =
+                        if (task.completed) Icons.Default.CheckBox
+                        else Icons.Default.CheckBoxOutlineBlank
                     Icon(
-                        imageVector = Icons.Default.Task,
+                        imageVector = taskIcon,
                         contentDescription = "Task Icon"
                     )
                 }
             }
             Column(modifier = Modifier.weight(1f)) {
+                Text(text = task.status)
                 Text(text = task.title)
                 Text(text = task.description, color = Color.LightGray)
                 Text(
