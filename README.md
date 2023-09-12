@@ -1,6 +1,10 @@
 ## TODO-App Cross-platform
 - Project template from jetpack compose multiplatform
 
+## User guide
+
+<img src="readme_images/priority_legend.png" height="300px">
+
 ## App Feature
 - [ ] Add, edit, delete, and mark tasks as completed
 - [ ] Display tasks in a list format with a user-friendly interface.
