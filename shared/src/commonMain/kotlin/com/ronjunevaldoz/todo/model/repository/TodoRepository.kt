@@ -1,0 +1,38 @@
+package com.ronjunevaldoz.todo.model.repository
+
+import com.ronjunevaldoz.todo.database.realm
+import com.ronjunevaldoz.todo.model.data.Todo
+import io.realm.kotlin.ext.query
+import io.realm.kotlin.query.RealmSingleQuery
+import org.mongodb.kbson.ObjectId
+
+/**
+ * TODO Move to dependency injector like koin
+ */
+object TodoRepository {
+    suspend fun add(todo: Todo) {
+        realm.write {
+            copyToRealm(todo)
+        }
+    }
+
+    suspend fun update(todoId: ObjectId, block: Todo.() -> Unit) {
+        realm.write {
+            query<Todo>("_id = $0", todoId).first().find()!!.also { todo ->
+                todo.apply(block)
+            }
+        }
+    }
+
+    suspend fun delete(todo: Todo) {
+        realm.write {
+            query<Todo>("_id = $0", todo._id).first().find()?.also { delete(it) }
+        }
+    }
+
+    fun findTodo(todoId: ObjectId): RealmSingleQuery<Todo> {
+        return realm.query<Todo>("_id = $0", todoId).first()
+    }
+
+    fun findTodos() = realm.query<Todo>().find()
+}
