@@ -70,6 +70,7 @@ fun App() {
                         "title",
                         "description",
                         "timestamp",
+                        "priority",
                     )
                 ) { savedState ->
                     AddEditTaskViewModel(taskId, savedState)

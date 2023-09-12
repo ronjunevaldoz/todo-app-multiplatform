@@ -75,7 +75,7 @@ fun AddEditScreen(
                 enabled = false,
                 value = viewModel.fieldTimestamp,
                 onValueChange = {
-                    viewModel.onEvent(AddEditTaskEvent.OnTimestampChange(it))
+                    viewModel.onEvent(AddEditTaskEvent.OnDueDateTimeChange(it))
                 },
                 placeholder = "Duedate",
             )

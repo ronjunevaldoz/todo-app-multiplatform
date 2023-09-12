@@ -76,8 +76,8 @@ fun TaskListScreen(
             )
             Spacer(modifier = Modifier.height(10.dp))
             LazyColumn {
-                tasks?.let {
-                    items(it.list) { task ->
+                tasks?.let { result->
+                    items(result.list.sortedBy { it.priority.value }) { task ->
                         TaskItem(
                             task = task,
                             onEvent = viewModel::onEvent

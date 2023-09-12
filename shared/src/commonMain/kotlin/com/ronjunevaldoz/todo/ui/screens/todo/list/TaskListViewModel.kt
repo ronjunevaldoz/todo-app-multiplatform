@@ -39,6 +39,15 @@ class TaskListViewModel : ViewModel() {
                     sendUiEvent(UiEvent.ShowSnackBar("Todo ${event.task.title} has been deleted."))
                 }
             }
+
+            is TaskListEvent.OnPriorityChange -> {
+                viewModelScope.launch {
+                    TodoRepository.update(event.task.id) {
+                        priority = event.priority
+                    }
+                    sendUiEvent(UiEvent.ShowSnackBar("Todo ${event.task.title} priority changed."))
+                }
+            }
         }
     }
 

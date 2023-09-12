@@ -3,6 +3,7 @@ package com.ronjunevaldoz.todo.ui.screens.todo.add_edit
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.ronjunevaldoz.todo.model.data.Priority
 import com.ronjunevaldoz.todo.model.data.Todo
 import com.ronjunevaldoz.todo.model.data.UiEvent
 import com.ronjunevaldoz.todo.model.repository.TodoRepository
@@ -32,11 +33,14 @@ class AddEditTaskViewModel(
     )
         private set
     var fieldTimestamp by mutableStateOf(
-        savedStateHolder.consumeRestored("timestamp") as String? ?: task?.timestamp?.toString()
+        savedStateHolder.consumeRestored("timestamp") as String? ?: task?.dueDateTime?.toString()
         ?: ""
     )
         private set
-
+    var fieldPriority by mutableStateOf(
+        savedStateHolder.consumeRestored("priority") as Int? ?: task?.priority?.value ?: 0
+    )
+        private set
 
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
@@ -51,6 +55,9 @@ class AddEditTaskViewModel(
         savedStateHolder.registerProvider("timestamp") {
             fieldTimestamp
         }
+        savedStateHolder.registerProvider("priority") {
+            fieldPriority
+        }
     }
 
     fun onEvent(event: AddEditTaskEvent) {
@@ -59,12 +66,16 @@ class AddEditTaskViewModel(
                 fieldDescription = event.value
             }
 
-            is AddEditTaskEvent.OnTimestampChange -> {
+            is AddEditTaskEvent.OnDueDateTimeChange -> {
                 fieldTimestamp = event.value
             }
 
             is AddEditTaskEvent.OnTitleChange -> {
                 fieldTitle = event.value
+            }
+
+            is AddEditTaskEvent.OnPriorityChange -> {
+                fieldPriority = event.value.value
             }
 
             AddEditTaskEvent.OnSaveTaskClick -> {
@@ -73,19 +84,21 @@ class AddEditTaskViewModel(
                     return
                 }
                 viewModelScope.launch {
-                    task?.let {
+                    task?.let { it ->
                         // update
                         TodoRepository.update(it.id) {
                             title = fieldTitle
                             description = fieldDescription
-                            timestamp = fieldTimestamp.toInstant()
+                            dueDateTime = fieldTimestamp.toInstant()
+                            priority = Priority.entries.find { it.value == fieldPriority }!!
                         }
                     } ?: run {
                         // add
                         TodoRepository.add(Todo().apply {
                             title = fieldTitle
                             description = fieldDescription
-                            timestamp = Clock.System.now()
+                            dueDateTime = Clock.System.now()
+                            priority = Priority.entries.find { it.value == fieldPriority } ?: Priority.LOW
                         })
                     }
                     sendUiEvent(UiEvent.PopBackStack)
