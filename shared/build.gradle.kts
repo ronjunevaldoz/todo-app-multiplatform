@@ -22,13 +22,19 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             val realm_version = "1.11.1"
+            val datetime_version = "0.4.1"
+            val extended_icon_version = "1.5.0"
+            val precompose_version = "1.5.0-rc01"
             dependencies {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
+                implementation("org.jetbrains.compose.material:material-icons-extended:$extended_icon_version")
+                api("moe.tlaster:precompose:$precompose_version")
+                api("moe.tlaster:precompose-viewmodel:$precompose_version")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:$datetime_version")
                 implementation("io.realm.kotlin:library-base:$realm_version")
                 implementation("io.realm.kotlin:library-sync:$realm_version") // If using Device Sync
             }
