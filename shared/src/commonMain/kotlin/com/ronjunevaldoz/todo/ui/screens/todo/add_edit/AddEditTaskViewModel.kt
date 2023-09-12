@@ -97,7 +97,7 @@ class AddEditTaskViewModel(
                         TodoRepository.add(Todo().apply {
                             title = fieldTitle
                             description = fieldDescription
-                            dueDateTime = Clock.System.now()
+                            dueDateTime = fieldTimestamp.toInstant()
                             priority = Priority.entries.find { it.value == fieldPriority } ?: Priority.LOW
                         })
                     }

@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.ronjunevaldoz.todo.model.data.Todo
 import com.ronjunevaldoz.todo.model.data.color
 import com.ronjunevaldoz.todo.ui.common.PriorityPicker
+import com.ronjunevaldoz.todo.utils.calendarLabel
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -85,7 +86,7 @@ fun TaskItem(
                 Text(text = task.title)
                 Text(text = task.description, color = Color.LightGray)
                 Text(
-                    text = task.dueDateTime.toLocalDateTime(TimeZone.UTC).toString(),
+                    text = task.dueDateTime.toLocalDateTime(TimeZone.currentSystemDefault()).date.calendarLabel,
                     color = Color.LightGray
                 )
             }

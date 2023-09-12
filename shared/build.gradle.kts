@@ -25,6 +25,7 @@ kotlin {
             val datetime_version = "0.4.1"
             val extended_icon_version = "1.5.0"
             val precompose_version = "1.5.0-rc01"
+            val datepicker = "1.0.4"
             dependencies {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
