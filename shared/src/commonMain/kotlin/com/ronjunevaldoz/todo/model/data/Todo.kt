@@ -24,4 +24,10 @@ class Todo : RealmObject {
         set(value) {
             _timestamp = value.toRealmInstant()
         }
+
+    @Ignore
+    val id: String
+        get() {
+            return _id.toHexString()
+        }
 }

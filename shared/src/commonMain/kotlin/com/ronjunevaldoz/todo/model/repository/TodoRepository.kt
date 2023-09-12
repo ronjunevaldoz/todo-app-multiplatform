@@ -16,9 +16,9 @@ object TodoRepository {
         }
     }
 
-    suspend fun update(todoId: ObjectId, block: Todo.() -> Unit) {
+    suspend fun update(todoId: String, block: Todo.() -> Unit) {
         realm.write {
-            query<Todo>("_id = $0", todoId).first().find()!!.also { todo ->
+            query<Todo>("_id = $0", ObjectId(todoId)).first().find()!!.also { todo ->
                 todo.apply(block)
             }
         }
@@ -30,8 +30,8 @@ object TodoRepository {
         }
     }
 
-    fun findTodo(todoId: ObjectId): RealmSingleQuery<Todo> {
-        return realm.query<Todo>("_id = $0", todoId).first()
+    fun findTodo(todoId: String): RealmSingleQuery<Todo> {
+        return realm.query<Todo>("_id = $0", ObjectId(todoId)).first()
     }
 
     fun findTodos() = realm.query<Todo>().find()
