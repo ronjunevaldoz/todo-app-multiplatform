@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id("org.jetbrains.compose")
+    id("io.realm.kotlin")
 }
 
 kotlin {
@@ -20,12 +21,16 @@ kotlin {
 
     sourceSets {
         val commonMain by getting {
+            val realm_version = "1.11.1"
             dependencies {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
+                implementation("io.realm.kotlin:library-base:$realm_version")
+                implementation("io.realm.kotlin:library-sync:$realm_version") // If using Device Sync
             }
         }
         val androidMain by getting {
@@ -64,5 +69,13 @@ android {
     }
     kotlin {
         jvmToolchain(11)
+    }
+}
+
+project.afterEvaluate {
+    kotlin.targets .all {
+        compilations.all {
+            (kotlinOptions as? org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions)?.jvmTarget = "11"
+        }
     }
 }
