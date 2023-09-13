@@ -7,7 +7,9 @@ import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 
-
+/**
+ * TODO move to view model
+ */
 fun generateCalendarGrid(year: Int, month: Int): List<CalendarDay> {
     val startDate = LocalDate(year, month, dayOfMonth = 1)
     val endDate = startDate + DatePeriod(months = 1) - DatePeriod(days = 1)

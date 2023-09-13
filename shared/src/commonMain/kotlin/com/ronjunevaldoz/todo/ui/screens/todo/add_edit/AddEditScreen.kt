@@ -104,9 +104,11 @@ fun AddEditScreen(
     }
 
     if (showCalendar.value) {
-        CalendarPicker(onDismiss = {
-            showCalendar.value = false
-        }) { calendarDay ->
+        CalendarPicker(
+            onDismiss = {
+                showCalendar.value = false
+            },
+        ) { calendarDay ->
 
             val now = Clock.System.now()
             val dateTimeNow = now.toLocalDateTime(TimeZone.currentSystemDefault())

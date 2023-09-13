@@ -10,8 +10,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 
+
+/**
+ * TODO Create a view model and data source
+ */
 @Composable
-fun CalendarPicker(onDismiss: () -> Unit, onSelectDay: (CalendarDay) -> Unit) {
+fun CalendarPicker(
+    onDismiss: () -> Unit,
+    onSelectDay: (CalendarDay) -> Unit
+) {
     Dialog(onDismissRequest = onDismiss, DialogProperties(usePlatformDefaultWidth = false)) {
         Card(
             modifier = Modifier
@@ -19,7 +26,9 @@ fun CalendarPicker(onDismiss: () -> Unit, onSelectDay: (CalendarDay) -> Unit) {
                 .padding(horizontal = 30.dp, vertical = 40.dp),
             shape = RoundedCornerShape(16.dp),
         ) {
-            Calendar(onSelectDay = onSelectDay)
+            Calendar(
+                onSelectDay = onSelectDay
+            )
         }
     }
 }

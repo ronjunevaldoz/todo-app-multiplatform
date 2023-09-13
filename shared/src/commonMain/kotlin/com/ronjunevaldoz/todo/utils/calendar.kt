@@ -34,15 +34,18 @@ val DayOfWeek.short: String
     }
 
 val LocalDate.calendarLabel: String
-    get() = "${dayOfWeek.short}, ${monthNumberToShortName(monthNumber)} ${dayOfMonth}, ${today.year}"
+    get() = "${dayOfWeek.short}, ${monthNumber.monthShortName} ${dayOfMonth}, $year"
+val LocalDate.calendarTitle: String
+    get() = "${
+        month.name.lowercase()
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+    }, $year"
 
-fun monthNumberToShortName(monthNumber: Int): String {
-    val months =
-        listOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
-    if (monthNumber in 1..12) {
-        return months[monthNumber - 1]
+val months =
+    listOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+val Int.monthShortName: String
+    get() = if (this in 1..12) {
+        months[this - 1]
     } else {
-        throw IllegalArgumentException("Invalid month number: $monthNumber")
+        throw IllegalArgumentException("Invalid month number: $this")
     }
-}
-
