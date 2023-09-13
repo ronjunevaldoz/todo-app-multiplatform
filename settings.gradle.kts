@@ -1,4 +1,4 @@
-rootProject.name = "MyApplication"
+rootProject.name = "TodoAppMultiplatform"
 
 include(":androidApp")
 include(":shared")
