@@ -54,18 +54,31 @@ fun App() {
                     )
                 }, authViewModel)
             }
-            scene(route = Routes.TASK_LIST) {
+            scene(route = "${Routes.TASK_LIST}/{userId}") { backStackEntry ->
+                val userId =
+                    backStackEntry.path<String>("userId") ?: throw Exception("User id invalid")
+
+                println("User: $userId")
                 val taskListViewModel = viewModel {
-                    TaskListViewModel()
+                    TaskListViewModel(userId)
                 }
                 TaskListScreen(
                     onNavigate = {
-                        navigator.navigate(it.route, NavOptions(true))
+                        if (it.clear) {
+                            navigator.popBackStack()
+                            navigator.navigate(
+                                it.route,
+                                NavOptions(popUpTo = PopUpTo(it.route, true))
+                            )
+                        } else {
+                            navigator.navigate(it.route, NavOptions(true))
+                        }
                     },
                     viewModel = taskListViewModel
                 )
             }
-            scene(route = "${Routes.ADD_EDIT_TASK}/") {
+            scene(route = "${Routes.ADD_EDIT_TASK}/{userId}") { backStackEntry ->
+                val userId = backStackEntry.path<String>("userId")
                 val addEditTaskViewModel = viewModel(
                     keys = listOf(
                         "title",
@@ -73,7 +86,7 @@ fun App() {
                         "timestamp",
                     )
                 ) { savedState ->
-                    AddEditTaskViewModel(null, savedState)
+                    AddEditTaskViewModel(userId, null, savedState)
                 }
 
                 AddEditScreen(
@@ -83,7 +96,8 @@ fun App() {
                     viewModel = addEditTaskViewModel
                 )
             }
-            scene(route = "${Routes.ADD_EDIT_TASK}/{taskId}") { backStackEntry ->
+            scene(route = "${Routes.ADD_EDIT_TASK}/{userId}/{taskId}") { backStackEntry ->
+                val userId = backStackEntry.path<String>("userId")
                 val taskId = backStackEntry.path<String>("taskId")
                 val addEditTaskViewModel = viewModel(
                     keys = listOf(
@@ -93,7 +107,7 @@ fun App() {
                         "priority",
                     )
                 ) { savedState ->
-                    AddEditTaskViewModel(taskId, savedState)
+                    AddEditTaskViewModel(userId, taskId, savedState)
                 }
 
                 AddEditScreen(

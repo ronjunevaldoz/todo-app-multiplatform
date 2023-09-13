@@ -3,6 +3,7 @@ package com.ronjunevaldoz.todo.model.repository
 import com.ronjunevaldoz.todo.database.realm
 import com.ronjunevaldoz.todo.model.data.Todo
 import io.realm.kotlin.ext.query
+import io.realm.kotlin.query.RealmResults
 import io.realm.kotlin.query.RealmSingleQuery
 import org.mongodb.kbson.ObjectId
 
@@ -34,5 +35,10 @@ object TodoRepository {
         return realm.query<Todo>("_id = $0", ObjectId(todoId)).first()
     }
 
-    fun findTodos() = realm.query<Todo>().find()
+    fun findTodos(userId: String? = null): RealmResults<Todo> {
+        if (userId == null) {
+            return realm.query<Todo>().find()
+        }
+        return realm.query<Todo>("userId = $0", ObjectId(userId)).find()
+    }
 }

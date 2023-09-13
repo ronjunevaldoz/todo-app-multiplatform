@@ -83,7 +83,7 @@ fun AddEditScreen(
             Spacer(modifier = Modifier.height(8.dp))
             TextInput(
                 enabled = false,
-                value = viewModel.fieldTimestamp,
+                value = viewModel.fieldTimestamp ?: "",
                 onValueChange = {
 
                 },

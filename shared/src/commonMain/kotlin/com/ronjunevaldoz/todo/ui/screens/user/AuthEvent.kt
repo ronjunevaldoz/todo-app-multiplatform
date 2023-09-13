@@ -5,5 +5,4 @@ sealed class AuthEvent {
     data class OnPasswordChange(val password: String) : AuthEvent()
     data object OnTogglePassword : AuthEvent()
     data object OnLoginClick : AuthEvent()
-    data object OnLogoutClick : AuthEvent()
 }

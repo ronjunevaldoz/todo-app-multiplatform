@@ -16,13 +16,12 @@ object UserRepository {
         }
     }
 
-    suspend fun update(userId: String, block: User.() -> Unit) {
+    suspend fun update(userId: String, block: User.() -> Unit) =
         realm.write {
             query<User>("_id = $0", ObjectId(userId)).first().find()!!.also { user ->
                 user.apply(block)
             }
         }
-    }
 
     suspend fun delete(user: User) {
         realm.write {
@@ -39,4 +38,18 @@ object UserRepository {
     }
 
     fun findUsers() = realm.query<User>().find()
+
+    fun getCurrentUser(): User? {
+        return findUsers().find { it.isAuthenticated }
+    }
+
+    suspend fun logout() {
+        realm.write {
+            query<User>( ).find().forEach {
+                it.apply {
+                    isAuthenticated = false
+                }
+            }
+        }
+    }
 }

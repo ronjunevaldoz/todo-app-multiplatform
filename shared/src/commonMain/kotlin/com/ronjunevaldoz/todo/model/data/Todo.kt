@@ -15,6 +15,7 @@ class Todo : RealmObject {
     var title: String = ""
     var description: String = ""
     var completed: Boolean = false
+    var userId: ObjectId? = null
     private var _priority: Int = Priority.HIGH.value
     private var _dueDateTime = RealmInstant.now()
 

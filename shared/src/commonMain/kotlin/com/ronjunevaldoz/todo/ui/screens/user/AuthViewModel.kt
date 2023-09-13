@@ -9,7 +9,6 @@ import com.ronjunevaldoz.todo.model.repository.UserRepository
 import com.ronjunevaldoz.todo.utils.Routes
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import moe.tlaster.precompose.stateholder.SavedStateHolder
 import moe.tlaster.precompose.viewmodel.ViewModel
@@ -18,8 +17,6 @@ import moe.tlaster.precompose.viewmodel.viewModelScope
 class AuthViewModel(
     savedStateHolder: SavedStateHolder
 ) : ViewModel() {
-
-    private val users = UserRepository.findUsers()
 
     var fieldUsername by mutableStateOf(
         savedStateHolder.consumeRestored("username") as String? ?: ""
@@ -33,53 +30,54 @@ class AuthViewModel(
         savedStateHolder.consumeRestored("passwordHidden") as Boolean? ?: true
     )
 
-    var currentUser by mutableStateOf<User?>(null)
-
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
     init {
         viewModelScope.launch {
-            UserRepository.add(User().apply {
-                username = "admin"
-                password = "password"
-            })
-        }
-        viewModelScope.launch {
-            users.asFlow().collectLatest { users ->
-                val user = users.list.find { it.isAuthenticated }
-                if (user != null) {
-                    currentUser = user
-                    sendUiEvent(UiEvent.Navigate(Routes.TASK_LIST))
-                }
+            // create dummy users
+            if (UserRepository.findUser("admin", "admin").find() == null) {
+                createDummyUsers("admin", "admin")
             }
+            if (UserRepository.findUser("ron", "ron").find() == null) {
+                createDummyUsers("ron", "ron")
+            }
+        }
+    }
+
+    private fun createDummyUsers(name: String, pass: String) {
+        viewModelScope.launch {
+            UserRepository.add(User().apply {
+                username = name
+                password = pass
+            })
         }
     }
 
     fun onEvent(event: AuthEvent) {
         when (event) {
             is AuthEvent.OnLoginClick -> {
-                viewModelScope.launch {
-                    val user = UserRepository.findUser(fieldUsername, fieldPassword).find()
-                    if (user == null) {
+                val user = UserRepository.findUser(fieldUsername, fieldPassword).find()
+                if (user == null) {
+                    sendUiEvent(
+                        UiEvent.ShowSnackBar(
+                            message = "Authentication failed: Wrong Username or Password"
+                        )
+                    )
+                } else {
+                    fieldUsername = ""
+                    fieldPassword = ""
+                    viewModelScope.launch {
+                        UserRepository.logout()
+                        UserRepository.update(user.id) {
+                            isAuthenticated = true
+                        }
                         sendUiEvent(
                             UiEvent.ShowSnackBar(
-                                message = "Authentication failed: Wrong Username or Password"
+                                message = "Authentication successful: Welcome, ${user.username}"
                             )
                         )
-                    } else {
-
-                        sendUiEvent(UiEvent.Navigate(Routes.TASK_LIST))
-                    }
-                }
-            }
-
-            AuthEvent.OnLogoutClick -> {
-                viewModelScope.launch {
-                    currentUser?.id?.let {
-                        UserRepository.update(it) {
-                            isAuthenticated = false
-                        }
+                        sendUiEvent(UiEvent.Navigate("${Routes.TASK_LIST}/${user.id}"))
                     }
                 }
             }

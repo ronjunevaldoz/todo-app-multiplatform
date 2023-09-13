@@ -14,8 +14,10 @@ import kotlinx.datetime.toInstant
 import moe.tlaster.precompose.stateholder.SavedStateHolder
 import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
+import org.mongodb.kbson.ObjectId
 
 class AddEditTaskViewModel(
+    private val currentUserId: String?,
     private val taskId: String?,
     savedStateHolder: SavedStateHolder
 ) : ViewModel() {
@@ -91,6 +93,7 @@ class AddEditTaskViewModel(
                     task?.let { it ->
                         // update
                         TodoRepository.update(it.id) {
+                            userId = currentUserId?.let { ObjectId(it) }
                             title = fieldTitle
                             description = fieldDescription
                             dueDateTime = dueDate.toInstant()
@@ -100,6 +103,7 @@ class AddEditTaskViewModel(
                     } ?: run {
                         // add
                         TodoRepository.add(Todo().apply {
+                            userId = currentUserId?.let { ObjectId(it) }
                             title = fieldTitle
                             description = fieldDescription
                             dueDateTime = dueDate.toInstant()

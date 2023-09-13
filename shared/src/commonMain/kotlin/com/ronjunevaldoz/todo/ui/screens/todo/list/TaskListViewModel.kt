@@ -2,6 +2,7 @@ package com.ronjunevaldoz.todo.ui.screens.todo.list
 
 import com.ronjunevaldoz.todo.model.data.UiEvent
 import com.ronjunevaldoz.todo.model.repository.TodoRepository
+import com.ronjunevaldoz.todo.model.repository.UserRepository
 import com.ronjunevaldoz.todo.utils.Routes
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -9,9 +10,10 @@ import kotlinx.coroutines.launch
 import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
 
-class TaskListViewModel : ViewModel() {
+class TaskListViewModel(private val userId: String) : ViewModel() {
 
-    val tasks = TodoRepository.findTodos()
+    val currentUser = UserRepository.findUser(userId)
+    val tasks = TodoRepository.findTodos(userId)
 
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
@@ -19,11 +21,11 @@ class TaskListViewModel : ViewModel() {
     fun onEvent(event: TaskListEvent) {
         when (event) {
             is TaskListEvent.OnTaskClick -> {
-                sendUiEvent(UiEvent.Navigate("${Routes.ADD_EDIT_TASK}/${event.task.id}"))
+                sendUiEvent(UiEvent.Navigate("${Routes.ADD_EDIT_TASK}/$userId/${event.task.id}"))
             }
 
             TaskListEvent.OnAddTaskClick -> {
-                sendUiEvent(UiEvent.Navigate("${Routes.ADD_EDIT_TASK}/"))
+                sendUiEvent(UiEvent.Navigate("${Routes.ADD_EDIT_TASK}/$userId"))
             }
 
             is TaskListEvent.OnStatusCompleted -> {
@@ -48,6 +50,13 @@ class TaskListViewModel : ViewModel() {
                         priority = event.priority
                     }
                     sendUiEvent(UiEvent.ShowSnackBar("Todo ${event.task.title} priority changed."))
+                }
+            }
+
+            TaskListEvent.OnLogoutClick -> {
+                viewModelScope.launch {
+                    UserRepository.logout()
+                    sendUiEvent(UiEvent.Navigate(Routes.LOGIN_SCREEN, true))
                 }
             }
         }
