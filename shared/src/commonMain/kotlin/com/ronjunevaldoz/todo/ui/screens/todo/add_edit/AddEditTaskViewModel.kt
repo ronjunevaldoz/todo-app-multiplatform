@@ -10,7 +10,6 @@ import com.ronjunevaldoz.todo.model.repository.TodoRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import kotlinx.datetime.toInstant
 import moe.tlaster.precompose.stateholder.SavedStateHolder
 import moe.tlaster.precompose.viewmodel.ViewModel
@@ -38,7 +37,8 @@ class AddEditTaskViewModel(
     )
         private set
     var fieldPriority by mutableStateOf(
-        savedStateHolder.consumeRestored("priority") as Int? ?: task?.priority?.value ?: 0
+        savedStateHolder.consumeRestored("priority") as Int? ?: task?.priority?.value
+        ?: Priority.LOW.value
     )
         private set
 
@@ -90,7 +90,8 @@ class AddEditTaskViewModel(
                             title = fieldTitle
                             description = fieldDescription
                             dueDateTime = fieldTimestamp.toInstant()
-                            priority = Priority.entries.find { it.value == fieldPriority }!!
+                            priority =
+                                Priority.entries.find { it.value == fieldPriority } ?: Priority.LOW
                         }
                     } ?: run {
                         // add
@@ -98,7 +99,8 @@ class AddEditTaskViewModel(
                             title = fieldTitle
                             description = fieldDescription
                             dueDateTime = fieldTimestamp.toInstant()
-                            priority = Priority.entries.find { it.value == fieldPriority } ?: Priority.LOW
+                            priority =
+                                Priority.entries.find { it.value == fieldPriority } ?: Priority.LOW
                         })
                     }
                     sendUiEvent(UiEvent.PopBackStack)

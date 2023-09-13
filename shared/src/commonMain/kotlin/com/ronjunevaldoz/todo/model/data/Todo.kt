@@ -15,7 +15,7 @@ class Todo : RealmObject {
     var title: String = ""
     var description: String = ""
     var completed: Boolean = false
-    private var _priority: Int = Priority.LOW.value
+    private var _priority: Int = Priority.HIGH.value
     private var _dueDateTime = RealmInstant.now()
 
     @Ignore
@@ -36,20 +36,16 @@ class Todo : RealmObject {
     @Ignore
     var priority: Priority
         get() {
-            // because state is actually a String and another client could assign an invalid value,
-            // default the state to "TADPOLE" if the state is unreadable
             return try {
-                // fetches the FrogState enum value associated with the current internal string value
-                Priority.entries.find { it.value == _priority } ?: Priority.UNKNOWN
+                Priority.entries.find { it.value == _priority } ?: Priority.LOW
             } catch (e: IllegalArgumentException) {
-                Priority.UNKNOWN
+                Priority.LOW
             }
         }
         set(value) {
-            // users set state using a FrogState, but it is saved as a string internally
             _priority = value.value
         }
 
     val status: String
-        get() = if(completed) "Completed" else "Todo"
+        get() = if (completed) "Completed" else "Todo"
 }

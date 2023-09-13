@@ -19,11 +19,11 @@ class TaskListViewModel : ViewModel() {
     fun onEvent(event: TaskListEvent) {
         when (event) {
             is TaskListEvent.OnTaskClick -> {
-                sendUiEvent(UiEvent.Navigate("/${Routes.ADD_EDIT_TASK}/${event.task.id}"))
+                sendUiEvent(UiEvent.Navigate("${Routes.ADD_EDIT_TASK}/${event.task.id}"))
             }
 
             TaskListEvent.OnAddTaskClick -> {
-                sendUiEvent(UiEvent.Navigate("/${Routes.ADD_EDIT_TASK}/"))
+                sendUiEvent(UiEvent.Navigate("${Routes.ADD_EDIT_TASK}/"))
             }
 
             is TaskListEvent.OnStatusCompleted -> {

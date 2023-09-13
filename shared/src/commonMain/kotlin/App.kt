@@ -31,10 +31,12 @@ fun App() {
     MaterialTheme {
         NavHost(
             navigator = navigator,
-            initialRoute = "/screens/${Routes.TASK_LIST}"
+            initialRoute = Routes.TASK_LIST
         ) {
+            scene(route = Routes.LOGIN_SCREEN) {
 
-            scene(route = "/screens/${Routes.TASK_LIST}") {
+            }
+            scene(route = Routes.TASK_LIST) {
                 val taskListViewModel = viewModel {
                     TaskListViewModel()
                 }
@@ -45,7 +47,7 @@ fun App() {
                     viewModel = taskListViewModel
                 )
             }
-            scene(route = "/${Routes.ADD_EDIT_TASK}/") {
+            scene(route = "${Routes.ADD_EDIT_TASK}/") {
                 val addEditTaskViewModel = viewModel(
                     keys = listOf(
                         "title",
@@ -63,7 +65,7 @@ fun App() {
                     viewModel = addEditTaskViewModel
                 )
             }
-            scene(route = "/${Routes.ADD_EDIT_TASK}/{taskId}") { backStackEntry ->
+            scene(route = "${Routes.ADD_EDIT_TASK}/{taskId}") { backStackEntry ->
                 val taskId = backStackEntry.path<String>("taskId")
                 val addEditTaskViewModel = viewModel(
                     keys = listOf(
