@@ -1,5 +1,6 @@
 package com.ronjunevaldoz.todo.ui.screens.user
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,7 +27,10 @@ import androidx.compose.ui.unit.sp
 import com.ronjunevaldoz.todo.model.data.UiEvent
 import com.ronjunevaldoz.todo.ui.common.TextInput
 import kotlinx.coroutines.flow.collectLatest
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun LoginScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,
@@ -73,6 +77,7 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(text = "Todo App Authentication", fontSize = 20.sp)
+            Image(painterResource("ic_launcher-web.png"), contentDescription = null)
             Spacer(modifier = Modifier.height(8.dp))
             TextInput(
                 value = viewModel.fieldUsername,
