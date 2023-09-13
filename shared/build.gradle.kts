@@ -38,6 +38,7 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:$datetime_version")
                 implementation("io.realm.kotlin:library-base:$realm_version")
                 implementation("io.realm.kotlin:library-sync:$realm_version") // If using Device Sync
+                implementation("com.liftric:kvault:1.10.0")
             }
         }
         val androidMain by getting {

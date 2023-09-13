@@ -33,7 +33,6 @@ class AddEditTaskViewModel(
         private set
     var fieldTimestamp by mutableStateOf(
         savedStateHolder.consumeRestored("timestamp") as String? ?: task?.dueDateTime?.toString()
-        ?: ""
     )
         private set
     var fieldPriority by mutableStateOf(
@@ -83,13 +82,18 @@ class AddEditTaskViewModel(
                     sendUiEvent(UiEvent.ShowSnackBar("Todo name cannot be empty"))
                     return
                 }
+                val dueDate = fieldTimestamp
+                if (dueDate.isNullOrEmpty()) {
+                    sendUiEvent(UiEvent.ShowSnackBar("Todo due date cannot be empty"))
+                    return
+                }
                 viewModelScope.launch {
                     task?.let { it ->
                         // update
                         TodoRepository.update(it.id) {
                             title = fieldTitle
                             description = fieldDescription
-                            dueDateTime = fieldTimestamp.toInstant()
+                            dueDateTime = dueDate.toInstant()
                             priority =
                                 Priority.entries.find { it.value == fieldPriority } ?: Priority.LOW
                         }
@@ -98,7 +102,7 @@ class AddEditTaskViewModel(
                         TodoRepository.add(Todo().apply {
                             title = fieldTitle
                             description = fieldDescription
-                            dueDateTime = fieldTimestamp.toInstant()
+                            dueDateTime = dueDate.toInstant()
                             priority =
                                 Priority.entries.find { it.value == fieldPriority } ?: Priority.LOW
                         })
