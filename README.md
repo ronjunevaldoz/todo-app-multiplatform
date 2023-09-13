@@ -19,7 +19,11 @@
   - `admin/admin`
   - `ron/ron`
 
+<img src="readme_images/login_screen.png" height="300px">
+
 2. Create a todo item
+
+ <img src="readme_images/todo_add_edit.png" height="300px">
 
 3. Select priority (Lower number means on top)
 
@@ -27,9 +31,12 @@
   - Medium - 2
   - Low - 3
  
-   <img src="readme_images/priority_legend.png" height="300px">
+  <img src="readme_images/priority_legend.png" height="300px">
 
 4. Toggle checkbox to mark as "Completed" otherwise "Todo"
+5. 
+   <img src="readme_images/mark_completed.png" height="300px">
+
 5. Press trash bin icon to delete todo item.
 
 ## App Feature
