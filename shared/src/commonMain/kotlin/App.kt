@@ -6,6 +6,8 @@ import com.ronjunevaldoz.todo.ui.screens.todo.add_edit.AddEditScreen
 import com.ronjunevaldoz.todo.ui.screens.todo.add_edit.AddEditTaskViewModel
 import com.ronjunevaldoz.todo.ui.screens.todo.list.TaskListScreen
 import com.ronjunevaldoz.todo.ui.screens.todo.list.TaskListViewModel
+import com.ronjunevaldoz.todo.ui.screens.user.AuthViewModel
+import com.ronjunevaldoz.todo.ui.screens.user.LoginScreen
 import com.ronjunevaldoz.todo.utils.Routes
 import io.realm.kotlin.Realm
 import io.realm.kotlin.notifications.InitialRealm
@@ -13,6 +15,7 @@ import io.realm.kotlin.notifications.RealmChange
 import io.realm.kotlin.notifications.UpdatedRealm
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.NavOptions
+import moe.tlaster.precompose.navigation.PopUpTo
 import moe.tlaster.precompose.navigation.path
 import moe.tlaster.precompose.navigation.rememberNavigator
 import moe.tlaster.precompose.viewmodel.viewModel
@@ -31,10 +34,25 @@ fun App() {
     MaterialTheme {
         NavHost(
             navigator = navigator,
-            initialRoute = Routes.TASK_LIST
+            initialRoute = Routes.LOGIN_SCREEN
         ) {
             scene(route = Routes.LOGIN_SCREEN) {
-
+                val authViewModel = viewModel(
+                    keys = listOf(
+                        "username",
+                        "password",
+                        "passwordHidden",
+                    )
+                ) {
+                    AuthViewModel(it)
+                }
+                LoginScreen(onNavigate = {
+                    navigator.popBackStack()
+                    navigator.navigate(
+                        it.route,
+                        NavOptions(popUpTo = PopUpTo(it.route, true))
+                    )
+                }, authViewModel)
             }
             scene(route = Routes.TASK_LIST) {
                 val taskListViewModel = viewModel {
