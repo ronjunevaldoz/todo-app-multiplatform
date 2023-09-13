@@ -1,6 +1,7 @@
 package com.ronjunevaldoz.todo.ui.screens.todo.list
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -60,7 +62,8 @@ fun TaskItem(
                     Icon(
                         imageVector = Icons.Default.Circle,
                         contentDescription = "Priority",
-                        tint = task.priority.color,
+                        modifier = Modifier.border(1.dp, task.priority.color, CircleShape),
+                        tint = task.priority.color.copy(alpha = 0.5f),
                     )
                 }
                 IconButton(onClick = {
