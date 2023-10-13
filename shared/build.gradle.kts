@@ -8,6 +8,8 @@ plugins {
 kotlin {
     androidTarget()
 
+    jvm("desktop")
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -38,7 +40,6 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:$datetime_version")
                 implementation("io.realm.kotlin:library-base:$realm_version")
                 implementation("io.realm.kotlin:library-sync:$realm_version") // If using Device Sync
-                implementation("com.liftric:kvault:1.10.0")
             }
         }
         val androidMain by getting {
@@ -56,6 +57,12 @@ kotlin {
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
+        }
+
+        val desktopMain by getting {
+            dependencies {
+                implementation(compose.desktop.common)
+            }
         }
     }
 }

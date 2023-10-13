@@ -1,6 +1,7 @@
 rootProject.name = "TodoAppMultiplatform"
 
 include(":androidApp")
+include(":desktopApp")
 include(":shared")
 
 pluginManagement {
