@@ -8,6 +8,7 @@ import com.ronjunevaldoz.todo.ui.screens.todo.list.TaskListScreen
 import com.ronjunevaldoz.todo.ui.screens.todo.list.TaskListViewModel
 import com.ronjunevaldoz.todo.ui.screens.user.AuthViewModel
 import com.ronjunevaldoz.todo.ui.screens.user.LoginScreen
+import com.ronjunevaldoz.todo.ui.theme.bumbleBeeColors
 import com.ronjunevaldoz.todo.utils.Routes
 import io.realm.kotlin.Realm
 import io.realm.kotlin.notifications.InitialRealm
@@ -31,7 +32,9 @@ fun App() {
             }
         }
     }
-    MaterialTheme {
+    MaterialTheme(
+        colors = bumbleBeeColors
+    ) {
         NavHost(
             navigator = navigator,
             initialRoute = Routes.LOGIN_SCREEN
